@@ -1,0 +1,5 @@
+
+### $Id: TODO,v 1.1 2008/02/04 19:57:55 goswami Exp $
+
+++ resurrect some old functions (e.g., predictionFromSMCObj) and write
+predict.SMC

@@ -1,0 +1,13 @@
+
+### $Id: NAMESPACE,v 1.5 2008/02/03 04:18:56 goswami Exp $
+
+useDynLib(SMC, SMCMainC)
+
+export(particleFilter,
+       auxiliaryParticleFilter,
+       sequentialMonteCarlo,
+       print.SMC,
+       MarkovSwitchingFuncGenerator)
+
+S3Method(print, SMC)
+

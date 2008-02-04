@@ -1,0 +1,40 @@
+
+### $Id: README,v 1.2 2008/02/04 19:57:55 goswami Exp $
+
+
+                        README for the SMC package
+                        --------------------------
+
+
+================================================================================
+QQ.     
+        Why did you write the back-end of this package in C and not in R?
+
+
+AA.
+
+        For the sake of speed (in research), one could ideally
+        implement user-provided "Required functions" of this package
+        (e.g., generateNextStreamsFunc and logObsDensFunc for
+        particleFilter) in C. Note, the user-provided "Optional
+        functions" (e.g., resampCriterionFunc, resampFunc and
+        summaryFunc) are already implemented in C.
+                                                                     
+        The interface of this package, however, needs that the user
+        provides the above-mentioned functions implemented in R, which
+        slows down the underlying C code because of constant back and
+        forth between the C-space and the R-space. 
+
+        There is TODO feature of this package, which will be only
+        beneficial to the advanced user who knows how to make R and C
+        talk. One of the future releases of this package will
+        entertain the above-mentioned user-provided functions written
+        in C by the user. Of course, that will entail building the
+        package from source by the user without errors, but hey, here
+        the assumption is that the user is advanced! And then things
+        will be as fast as it gets, due to minimal back and forth
+        between the C-space and the R-space.
+
+
+
+                ---Happy coding and research!---
