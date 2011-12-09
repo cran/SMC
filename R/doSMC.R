@@ -101,7 +101,8 @@ SMCMain <-
     res$dimPerPeriod      <- dimPerPeriod
     res$nStreamsPreResamp <- nStreamsPreResamp
     res$nMHSteps          <- nMHSteps
-    
+    res                   <- c(res, list(summaryFunc = summaryFunc))
+
     if (!any(is.na(ptm))) res$time <- proc.time( ) - ptm
     class(res) <- 'SMC'
     res
@@ -140,7 +141,8 @@ sequentialMonteCarlo <-
                    returnLogWeights    = returnLogWeights,
                    verboseLevel        = verboseLevel,
                    ...)
-    ret$filterType <- 'sequentialMonteCarlo'
+    ret$propagateFunc <- propagateFunc
+    ret$filterType    <- 'sequentialMonteCarlo'
     ret
 }
 
@@ -306,7 +308,10 @@ auxiliaryParticleFilter <-
                    returnLogWeights    = returnLogWeights,
                    verboseLevel        = verboseLevel,
                    ...)
-    ret$filterType <- 'auxiliaryParticleFilter'
+    ret$generateStreamRepsFunc  <- generateNextStreamsFunc
+    ret$generateNextStreamsFunc <- generateNextStreamsFunc
+    ret$logObsDensFunc          <- logObsDensFunc
+    ret$filterType              <- 'auxiliaryParticleFilter'
     ret    
 }
 
@@ -477,7 +482,9 @@ particleFilter <-
                    returnLogWeights    = returnLogWeights,
                    verboseLevel        = verboseLevel,
                    ...)
-    ret$filterType <- 'particleFilter'
+    ret$generateNextStreamsFunc <- generateNextStreamsFunc
+    ret$logObsDensFunc          <- logObsDensFunc
+    ret$filterType              <- 'particleFilter'
     ret        
 }
 
@@ -501,3 +508,4 @@ print.SMC <-
     print(summary(tmp))
     cat('\n')
 }
+

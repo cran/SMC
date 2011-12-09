@@ -8,9 +8,14 @@
 \title{The particle filtering algorithm}
 
 \description{
+
   Function for doing particle filtering given the \emph{state equation}
   (via \code{generateNextStreamFunc}), and the \emph{observation
     equation} density (via \code{logObsDensFunc}).
+
+  See the sections \emph{Details}, \emph{Required Functions} and
+  \emph{Optional Functions} for explanation on the arguments and the
+  return values of the \emph{arguments that are themselves functions}.
 }
 
 \usage{
@@ -32,11 +37,6 @@ particleFilter(nStreams,
 }
 
 \arguments{
-  See the sections \emph{Details}, \emph{Required Functions} and
-  \emph{Optional Functions} for explanation on the arguments and the
-  return values of the \emph{following arguments that are themselves
-  functions}.
-  
   \item{nStreams}{\code{integer} \eqn{>} 0.}
   
   \item{nPeriods}{\code{integer} \eqn{>} 0.}

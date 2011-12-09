@@ -278,6 +278,56 @@ collectVarnames <-
 
 ### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+.check.SMCObj <-
+    function (SMCObj)
+{
+    if (!inherits(SMCObj, 'SMC'))
+        fatal('Please provide an object of class "SMC" for SMCObj')
+
+    if (is.null(SMCObj$draws$streams)) {
+        msg <- paste('Please re-run your SMC sampler with "returnStreams = TRUE"',
+                     'and then pass the resulting SMC output object')
+        fatal(msg)
+    }
+    
+    if (is.null(SMCObj$draws$logWeights)) {
+        msg <- paste('Please re-run your SMC sampler with "returnLogWeights = TRUE"',
+                     'and then pass the resulting SMC output object')
+        fatal(msg)
+    }    
+}
+
+.check.generateObsFunc <-
+    function (generateObsFunc)
+{
+    argsReq   <- c('currentPeriod', 'currentStreams', 'nPeriodsPast',
+                   'lag1Obs', '...')
+    retObjMsg <- 'a numeric vector'
+    .check.func.do(generateObsFunc, argsReq = argsReq, retObjMsg = retObjMsg)    
+}
+
+.check.nPeriodsPast <-
+    function (nPeriodsPast, nPeriods)
+{
+    if (nPeriodsPast > nPeriods) {
+        msg <- paste('Please provide a valid nPeriodsPast :: it should be an ',
+                     'integer <= nPeriods (= ', nPeriods, ')', sep = '')
+        fatal(msg, nPeriodsPast)
+    }
+
+    as.integer(nPeriodsPast)
+}
+
+.check.weightedSummaryFunc <-
+    function (weightedSummaryFunc)
+{
+    argsReq <- c('vals', 'weights', '...')
+    retObjMsg <- 'a numeric value'
+    .check.func.do(weightedSummaryFunc, argsReq = argsReq, retObjMsg = retObjMsg)
+}
+
+### %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 doCall <-
     function (func, argsList, dotsList)
 {

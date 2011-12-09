@@ -9,5 +9,5 @@ export(particleFilter,
        print.SMC,
        MarkovSwitchingFuncGenerator)
 
-S3Method(print, SMC)
+S3method(print, SMC)
 

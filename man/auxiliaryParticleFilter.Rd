@@ -9,10 +9,14 @@
 
 \description{
   Function for doing auxiliary particle filtering given the \emph{state
-    equation} (via \code{generateNextStreamsFunc}), the \emph{stream
-    representative} generation rule (via \code{generateStreamRepsFunc}),
-    and the \emph{observation equation} density (via
-    \code{logObsDensFunc}).
+  equation} (via \code{generateNextStreamsFunc}), the \emph{stream
+  representative} generation rule (via \code{generateStreamRepsFunc}),
+  and the \emph{observation equation} density (via
+  \code{logObsDensFunc}).
+
+  See the sections \emph{Details}, \emph{Required Functions} and
+  \emph{Optional Functions} for explanation on the arguments and the
+  return values of the \emph{arguments that are themselves functions}.
   }
   
 \usage{
@@ -35,11 +39,6 @@ auxiliaryParticleFilter(nStreams,
 }
 
 \arguments{
-  See the sections \emph{Details}, \emph{Required Functions} and
-  \emph{Optional Functions} for explanation on the arguments and the
-  return values of the \emph{following arguments that are themselves
-  functions}.
-  
   \item{nStreams}{\code{integer} \eqn{>} 0.}
   
   \item{nPeriods}{\code{integer} \eqn{>} 0.}

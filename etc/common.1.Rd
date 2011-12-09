@@ -1,51 +1,23 @@
 
-%%% $Id: sequentialMonteCarlo.Rd,v 1.8 2008/02/04 21:40:10 goswami Exp $
+\name{common.1}
 
-\name{sequentialMonteCarlo}
+\alias{common.1}
 
-\alias{sequentialMonteCarlo}
-
-\title{The sequential Monte Carlo (SMC) algorithm}
-
-\description{
-  Function for the doing sequential Monte Carlo algorithm given the
-  propagation rule over time (via \code{propagateFunc}). This is the
-  most general interface for implementing a new SMC strategy, by
-  providing a new propagation rule.
-
-  See the sections \emph{Details}, \emph{Required Functions} and
-  \emph{Optional Functions} for explanation on the arguments and the
-  return values of the \emph{arguments that are themselves functions}.
-  }
-
-\usage{
-sequentialMonteCarlo(nStreams,                     
-                     nPeriods,                     
-                     dimPerPeriod,                 
-                     propagateFunc,             
-                     resampCriterionFunc = NULL,   
-                     resampFunc          = NULL,   
-                     summaryFunc         = NULL,   
-                     nMHSteps            = 0,      
-                     MHUpdateFunc        = NULL,   
-                     nStreamsPreResamp   = NULL,   
-                     returnStreams       = FALSE,  
-                     returnLogWeights    = FALSE,  
-                     verboseLevel        = 0,      
-                     \dots)                          
-}
+\title{The Common stuff for particleFilter, auxiliaryParticleFilter and
+sequentialMonteCarlo}
 
 \arguments{
+  See the sections \emph{Details}, \emph{Required Functions} and
+  \emph{Optional Functions} for explanation on the arguments and the
+  return values of the \emph{following arguments that are themselves
+  functions}.
+  
   \item{nStreams}{\code{integer} \eqn{>} 0.}
   
   \item{nPeriods}{\code{integer} \eqn{>} 0.}
   
   \item{dimPerPeriod}{\code{integer} \eqn{>} 0.}
-
-  \item{propagateFunc}{\code{function} of six arguments
-    \code{(currentPeriod, nStreamsToGenerate, lag1Streams,
-    lag1LogWeights, startingStreams, \dots)}.}
-
+  
   \item{resampCriterionFunc}{\code{function} of four arguments
     \code{(currentPeriod, currentStreams, currentLogWeights, \dots)}.}
   
@@ -70,10 +42,6 @@ sequentialMonteCarlo(nStreams,
   \item{verboseLevel}{\code{integer}, a value \eqn{\ge}{>=} 2 produces a
     lot of output.}
 
-  \item{\dots}{optional arguments to be passed to \code{propagateFunc},
-    \code{resampCriterionFunc}, \code{resampFunc}, \code{summaryFunc}
-    and \code{MHUpdateFunc}.}
-
 }
 
 \details{
@@ -92,62 +60,6 @@ sequentialMonteCarlo(nStreams,
   }
 }
 
-\section{Required function: propagateFunc}{
-
-  \describe{
-
-    \item{Arguments:}{The following argument(s) require some
-      explanation:}
-
-  }
-  
-  \describe{
-
-    \item{\code{nStreamsToGenerate}}{the number of streams to generate
-      for propagating from \code{currentPeriod - 1} to
-      \code{currentPeriod}. This function is usally called by setting
-      \code{nStreamsToGenerate} to \code{nStreamsPreResamp}.}
-
-    \item{\code{lag1Streams}}{a matrix of dimension \code{nStreams}
-      \eqn{\times}{x} \code{dimPerPeriod} of streams for
-      \code{currentPeriod - 1}.}
-
-    \item{\code{lag1LogWeights}}{a vector of length \code{nStreams} of
-      log weights corresponding to the streams in the argument matrix
-      \code{lag1Streams}.}
-
-    \item{\code{startingStreams}}{a matrix of dimension \code{nStreams}
-      \eqn{\times}{x} \code{dimPerPeriod} to be used for
-      \code{currentPeriod = 1}. If this is \code{NULL}, then the function
-      should provide a way to generate streams for \code{currentPeriod =
-      1}.}
-
-  }
-
-  \describe{
-
-    \item{Return value:}{a \emph{named} list with the following
-      components:}
-
-  }
-  
-  \describe{
-
-    \item{\code{currentStreams}}{a matrix of dimension
-      \code{nStreamsToGenerate} \eqn{\times}{x} \code{dimPerPeriod}. The
-      rows of this matrix contain the propagated (updated) streams for
-      period \code{currentPeriod}, given the argument \code{lag1Streams}
-      matrix and the argument \code{lag1LogWeights} vector for
-      \code{currentPeriod - 1}.}
-
-    \item{\code{currentLogWeights}}{the propagated (updated) log weights
-      vector of length \code{nStreamsToGenerate}, associated with the
-      streams in the rows of the returned \code{currentStreams} matrix.}
-
-  }
-
-}
-    
 \section{Optional function: resampCriterionFunc}{
 
   \describe{
@@ -345,10 +257,9 @@ sequentialMonteCarlo(nStreams,
   \item{nStreamsPreResamp}{the \code{nStreamsPreResamp} argument.}
 
   \item{nMHSteps}{the \code{nMHSteps} argument.}
-
-  \item{filterType}{type of the filter: \dQuote{sequentialMonteCarlo}.}
   
   \item{time}{the time taken by the run.}  
+
 }
 
 \note{
@@ -356,7 +267,7 @@ sequentialMonteCarlo(nStreams,
   arguments above are as follows:
 
   \describe{
-    
+
     \item{\code{resampCriterionFunc}}{the builtin resampling criterion,
       namely, resample when square of the coefficient of variation of
       the weights \eqn{\ge}{>=} 1, is used.}
@@ -369,26 +280,7 @@ sequentialMonteCarlo(nStreams,
       returns the weighted average of each of the \code{dimPerPeriod}
       dimensions, is used.}
 
-    \item{\code{MHUpdateFunc}}{\emph{unlike},
-      \code{\link{particleFilter}}, there is no builtin Metropolis
-      Hastings updating function, which generates proposals for
-      \code{currentPeriod} streams using those of \code{currentPeriod -
-        1}. The user needs to implement this function if
-      \code{nMHSteps} > 0.}
-
     \item{\code{nStreamsPreResamp}}{it is set to \code{nStreams}.}
-
-  }
-
-  Also, the following point is worth noting:
-
-  \describe{
-
-    \item{\code{resampCriterionFunc}, \code{resampFunc},
-      \code{summaryFunc}}{are only necessary when user wants to try out
-      new resampling schemes or enhanced summary generation procedures,
-      as part of their research. The default builtins take care of the
-      typical problems.}
 
   }
 
@@ -429,88 +321,4 @@ sequentialMonteCarlo(nStreams,
 
 \author{Gopi Goswami \email{goswami@stat.harvard.edu}}
 
-\references{
-  \cite{Jun S. Liu (2001). \emph{Monte Carlo strategies for
-      scientific computing.} Springer. Chapter 3.}
 
-  \cite{Jun S. Liu and Rong Chen (1998). Sequential Monte Carlo
-    methods for dynamical systems. \emph{Journal of the American
-      Statistical Association 98(443): 1032-1044.}}
-
-%   \cite{Huerta, Gabriel and West, Mike (1999), Priors and Component
-%     Structures in Autoregressive Time Series Models, \emph{Journal of the
-%     Royal Statistical Society, Series B: Statistical Methodology,
-%     volume 61, 881-899.}}  
-}
-
-\seealso{\code{\link{particleFilter}},
-  \code{\link{auxiliaryParticleFilter}}}
-
-\examples{
-MSObj  <- MarkovSwitchingFuncGenerator(-12345)
-smcObj <-
-    with(MSObj,
-     {
-         sequentialMonteCarlo(nStreams         = 5000,
-                              nPeriods         = nrow(yy),
-                              dimPerPeriod     = ncol(yy),
-                              propagateFunc    = propagateFunc,
-                              returnStreams    = TRUE,
-                              returnLogWeights = TRUE,
-                              verboseLevel     = 1)
-     })
-print(smcObj)
-print(names(smcObj))
-with(c(smcObj, MSObj),
- {
-     par(mfcol = c(2, 1))
-     plot(as.ts(yy),
-          main     = expression('The data and the underlying regimes'),
-          cex.main = 0.8,
-          xlab     = 'period',
-          ylab     = 'data and the regime means',
-          cex.lab  = 0.8)
-     lines(as.ts(mu), col = 2, lty = 2)
-     plot(as.ts(draws$summary[1, ]),
-          main     = expression('The underlying regimes and their estimates'),
-          cex.main = 0.8,
-          xlab     = 'period',
-          ylab     = 'regime means',
-          cex.lab  = 0.8)
-     lines(as.ts(mu), col = 2, lty = 2)        
- })
-
-MSObj  <- MarkovSwitchingFuncGenerator(-54321)
-smcObj <-
-    with(MSObj,
-     {
-         sequentialMonteCarlo(nStreams         = 5000,
-                              nPeriods         = nrow(yy),
-                              dimPerPeriod     = ncol(yy),
-                              propagateFunc    = propagateFunc,
-                              returnStreams    = TRUE,
-                              returnLogWeights = TRUE,
-                              verboseLevel     = 1)
-     })
-print(smcObj)
-print(names(smcObj))
-with(c(smcObj, MSObj),
- {
-     par(mfcol = c(2, 1))
-     plot(as.ts(yy),
-          main     = expression('The data and the underlying regimes'),
-          cex.main = 0.8,
-          xlab     = 'period',
-          ylab     = 'data and the regime means',
-          cex.lab  = 0.8)
-     lines(as.ts(mu), col = 2, lty = 2)
-     plot(as.ts(draws$summary[1, ]),
-          main     = expression('The underlying regimes and their estimates'),
-          cex.main = 0.8,
-          xlab     = 'period',
-          ylab     = 'regime means',
-          cex.lab  = 0.8)
-     lines(as.ts(mu), col = 2, lty = 2)        
- })
-}
-\keyword{methods}
